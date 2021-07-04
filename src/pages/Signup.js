@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Section from '../components/Section/Section';
+import { AuthContext } from '../context/AuthContext';
+
 import {
   FormWrapper,
+  Title,
   Form,
   Center,
   Input,
@@ -12,10 +15,12 @@ import {
   InputError,
   FormFooter,
   FormFooterText,
+  LinkTo,
 } from './FormStyles';
 import { Button } from '../lib/styles/generalStyles';
 
 const Signup = () => {
+  const { signup, user } = useContext(AuthContext);
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -38,14 +43,20 @@ const Signup = () => {
         }
       ),
     }),
+
+    onSubmit: (values) => {
+      signup(values.email, values.password)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    },
   });
 
   return (
-    <Section>
+    <Section fullHeight>
       <Center>
         <FormWrapper>
-          <Form>
-            {' '}
+          <Form onSubmit={formik.handleSubmit}>
+            <Title>Registracija</Title>
             <FormRow>
               <Label htmlFor="email">Email adresa</Label>
               <Input
@@ -85,9 +96,12 @@ const Signup = () => {
             </Center>
           </Form>
           <FormFooter>
-            <FormFooterText>Već imaš račun? Prijavi se</FormFooterText>
+            <FormFooterText>
+              Već imaš račun? <LinkTo to="/login">Prijavi se</LinkTo>
+            </FormFooterText>
           </FormFooter>
         </FormWrapper>
+        {user && console.log(user.email)}
       </Center>
     </Section>
   );

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { breakpoints, boxShadow, colors } from '../lib/styles/theme';
+import { Link } from 'react-router-dom';
 
 export const FormWrapper = styled.div`
   width: 90%;
@@ -7,6 +8,10 @@ export const FormWrapper = styled.div`
   @media screen and (${breakpoints.tablet}) {
     max-width: 400px;
   }
+`;
+
+export const Title = styled.h2`
+  padding-bottom: 16px;
 `;
 
 export const Form = styled.form`
@@ -56,3 +61,9 @@ export const FormFooter = styled.div`
 `;
 
 export const FormFooterText = styled.p``;
+
+export const LinkTo = styled(Link)`
+  text-decoration: none;
+  font-weight: bold;
+  color: ${colors.blue};
+`;
