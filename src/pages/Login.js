@@ -20,7 +20,7 @@ import {
 import { Button } from '../lib/styles/generalStyles';
 
 const Signup = () => {
-  const { login } = useContext(AuthContext);
+  const { login, user } = useContext(AuthContext);
   const history = useHistory();
   const formik = useFormik({
     initialValues: {
@@ -40,8 +40,7 @@ const Signup = () => {
     onSubmit: async (values) => {
       try {
         await login(values.email, values.password);
-        console.log('Succesful login!');
-        history.push('/');
+        if (user) history.push('/');
       } catch (error) {
         console.log('Something went wrong!');
       }
@@ -77,7 +76,9 @@ const Signup = () => {
               ) : null}
             </FormRow>
             <Center>
-              <Button bottomMargin={'24'}>Prijava</Button>
+              <Button bottomMargin={'24'} type="submit">
+                Prijava
+              </Button>
             </Center>
           </Form>
           <FormFooter>

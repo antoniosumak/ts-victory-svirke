@@ -40,6 +40,7 @@ export const Input = styled.input`
   text-indent: 10px;
   border: 1px solid ${colors.grey};
   margin: 8px 0px;
+  background-color: ${colors.white};
 
   &::placeholder {
     font-size: 16px;
