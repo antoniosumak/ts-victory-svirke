@@ -25,3 +25,16 @@ export const Navigation = styled.nav`
     max-width: 1224px;
   }
 `;
+
+export const InnerNavigation = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const Image = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+`;

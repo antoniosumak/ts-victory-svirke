@@ -1,8 +1,15 @@
 import React, { useContext } from 'react';
-import { HeaderWrapper, Navigation } from './HeaderStyles';
+import { Link } from 'react-router-dom';
+import {
+  HeaderWrapper,
+  Navigation,
+  InnerNavigation,
+  Image,
+} from './HeaderStyles';
 import { Button } from '../../lib/styles/generalStyles';
 import { AuthContext } from '../../context/AuthContext';
 import { useHistory } from 'react-router-dom';
+import logo from '../../assets/images/logo.png';
 
 const Header = () => {
   const { logout, user } = useContext(AuthContext);
@@ -15,7 +22,14 @@ const Header = () => {
   return (
     <HeaderWrapper>
       <Navigation>
-        {user && <Button onClick={handleLogout}>Odjavi se</Button>}
+        {user && (
+          <InnerNavigation>
+            <Link to="/">
+              <Image src={logo} alt={'logo'} />
+            </Link>
+            <Button onClick={handleLogout}>Odjavi se</Button>
+          </InnerNavigation>
+        )}
       </Navigation>
     </HeaderWrapper>
   );
