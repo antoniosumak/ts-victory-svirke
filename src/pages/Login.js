@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Section from '../components/Section/Section';
+import { AuthContext } from '../context/AuthContext';
+import { useHistory } from 'react-router-dom';
 import {
   FormWrapper,
   Title,
@@ -18,6 +20,8 @@ import {
 import { Button } from '../lib/styles/generalStyles';
 
 const Signup = () => {
+  const { login } = useContext(AuthContext);
+  const history = useHistory();
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -32,13 +36,23 @@ const Signup = () => {
         .min(6, 'Password must contain at least 6 characters!')
         .required('Password is required!'),
     }),
+
+    onSubmit: async (values) => {
+      try {
+        await login(values.email, values.password);
+        console.log('Succesful login!');
+        history.push('/');
+      } catch (error) {
+        console.log('Something went wrong!');
+      }
+    },
   });
 
   return (
     <Section fullHeight>
       <Center>
         <FormWrapper>
-          <Form>
+          <Form onSubmit={formik.handleSubmit}>
             <Title>Prijava</Title>
             <FormRow>
               <Label htmlFor="email">Email adresa</Label>

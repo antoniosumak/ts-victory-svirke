@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Section from '../components/Section/Section';
 import { AuthContext } from '../context/AuthContext';
+import { useHistory } from 'react-router-dom';
 
 import {
   FormWrapper,
@@ -20,7 +21,8 @@ import {
 import { Button } from '../lib/styles/generalStyles';
 
 const Signup = () => {
-  const { signup, user } = useContext(AuthContext);
+  const { signup } = useContext(AuthContext);
+  const history = useHistory();
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -44,10 +46,14 @@ const Signup = () => {
       ),
     }),
 
-    onSubmit: (values) => {
-      signup(values.email, values.password)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        await signup(values.email, values.password);
+        console.log('Succesful registration!');
+        history.push('/');
+      } catch (err) {
+        console.log('Something went wrong!');
+      }
     },
   });
 
@@ -101,7 +107,6 @@ const Signup = () => {
             </FormFooterText>
           </FormFooter>
         </FormWrapper>
-        {user && console.log(user.email)}
       </Center>
     </Section>
   );

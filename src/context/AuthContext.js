@@ -5,14 +5,24 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const signup = (email, password) => {
     auth.createUserWithEmailAndPassword(email, password);
   };
 
+  const login = (email, password) => {
+    auth.signInWithEmailAndPassword(email, password);
+  };
+
+  const logout = () => {
+    return auth.signOut();
+  };
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
+      setLoading(false);
     });
 
     return unsubscribe;
@@ -21,11 +31,12 @@ const AuthProvider = ({ children }) => {
   const contextValues = {
     user,
     signup,
+    login,
   };
 
   return (
     <AuthContext.Provider value={contextValues}>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
