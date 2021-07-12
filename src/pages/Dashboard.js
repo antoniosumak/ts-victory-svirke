@@ -23,14 +23,16 @@ const Dashboard = () => {
 
   useEffect(() => {
     let tempArray = [];
-    db.collection('gigs').onSnapshot((query) => {
-      query.forEach((dataResponse) => {
-        tempArray.push(dataResponse.data());
+    db.collection('gigs')
+      .orderBy('date')
+      .onSnapshot((query) => {
+        query.forEach((dataResponse) => {
+          tempArray.push(dataResponse.data());
+        });
+        setPosts(tempArray);
+        setLoading(false);
+        tempArray = [];
       });
-      setPosts(tempArray);
-      setLoading(false);
-      tempArray = [];
-    });
   }, [loading]);
 
   console.log(posts);

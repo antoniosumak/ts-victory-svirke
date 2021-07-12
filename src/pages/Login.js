@@ -40,7 +40,7 @@ const Signup = () => {
     onSubmit: async (values) => {
       try {
         await login(values.email, values.password);
-        if (user) history.push('/');
+        (await user) && history.push('/');
       } catch (error) {
         console.log('Something went wrong!');
       }
