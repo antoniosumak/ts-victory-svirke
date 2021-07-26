@@ -17,9 +17,13 @@ import {
 import { Button } from '../lib/styles/generalStyles';
 
 import { FormRow, Label, Input, Form } from './FormStyles';
+
 const Dashboard = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const today = new Date();
+  const day = today.getDate();
+  const month = today.getMonth() + 1;
 
   useEffect(() => {
     let tempArray = [];
@@ -31,11 +35,10 @@ const Dashboard = () => {
         });
         setPosts(tempArray);
         setLoading(false);
+
         tempArray = [];
       });
   }, [loading]);
-
-  console.log(posts);
 
   const formik = useFormik({
     initialValues: {
@@ -87,15 +90,25 @@ const Dashboard = () => {
             </TableHeader>
             <TableContent>
               {posts.length !== 0 &&
-                posts.map((values, index) => (
-                  <Tr key={index}>
-                    <Td>{values.celebration}</Td>
-                    <Td>{values.location}</Td>
-                    <Td>{`${values.date.split('-')[2]}.${
-                      values.date.split('-')[1]
-                    }.${values.date.split('-')[0]}.`}</Td>
-                  </Tr>
-                ))}
+                posts.map((values, index) => {
+                  let done = false;
+                  if (
+                    values.date.split('-')[2] <= day &&
+                    values.date.split('-')[1] <= month
+                  ) {
+                    done = true;
+                  }
+
+                  return (
+                    <Tr key={index}>
+                      <Td done={done}>{values.celebration}</Td>
+                      <Td done={done}>{values.location}</Td>
+                      <Td done={done}>{`${values.date.split('-')[2]}.${
+                        values.date.split('-')[1]
+                      }.${values.date.split('-')[0]}.`}</Td>
+                    </Tr>
+                  );
+                })}
             </TableContent>
           </TableWrapper>
         </DashboardData>

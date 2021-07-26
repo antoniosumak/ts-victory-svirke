@@ -56,4 +56,6 @@ export const Th = styled.th`
 export const Td = styled.td`
   border: none;
   padding: 10px;
+  background-color: ${(p) => (p.done ? '#156456' : '#fff')};
+  color: ${(p) => (p.done ? '#fff' : '#333')};
 `;
