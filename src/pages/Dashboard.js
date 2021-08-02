@@ -92,13 +92,14 @@ const Dashboard = () => {
               {posts.length !== 0 &&
                 posts.map((values, index) => {
                   let done = false;
-                  if (
-                    values.date.split('-')[2] <= day &&
-                    values.date.split('-')[1] <= month
+                  if (values.date.split('-')[1] < month) {
+                    done = true;
+                  } else if (
+                    values.date.split('-')[1] <= month &&
+                    day >= values.date.split('-')[2]
                   ) {
                     done = true;
                   }
-
                   return (
                     <Tr key={index}>
                       <Td done={done}>{values.celebration}</Td>
