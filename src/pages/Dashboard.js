@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import Section from '../components/Section/Section';
 import { useFormik } from 'formik';
 import { db } from '../firebase';
+import moment from 'moment';
 import {
   DashboardWrapper,
   DashboardFeatures,
@@ -31,7 +32,13 @@ const Dashboard = () => {
       .orderBy('date')
       .onSnapshot((query) => {
         query.forEach((dataResponse) => {
-          tempArray.push(dataResponse.data());
+          const tempObj = {
+            id: dataResponse.id,
+            celebration: dataResponse.data().celebration,
+            date: dataResponse.data().date,
+            location: dataResponse.data().location,
+          };
+          tempArray.push(tempObj);
         });
         setPosts(tempArray);
         setLoading(false);
@@ -39,6 +46,10 @@ const Dashboard = () => {
         tempArray = [];
       });
   }, [loading]);
+
+  const deleteEvent = (id) => {
+    db.collection('gigs').doc(id).delete();
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -57,26 +68,26 @@ const Dashboard = () => {
         <DashboardFeatures>
           <Form onSubmit={formik.handleSubmit}>
             <FormRow>
-              <Label htmlFor="celebration">Prigoda</Label>
+              <Label htmlFor='celebration'>Prigoda</Label>
               <Input
-                id="celebration"
-                type="text"
+                id='celebration'
+                type='text'
                 {...formik.getFieldProps('celebration')}
               />
             </FormRow>
             <FormRow>
-              <Label htmlFor="location">Lokacija</Label>
+              <Label htmlFor='location'>Lokacija</Label>
               <Input
-                id="location"
-                type="text"
+                id='location'
+                type='text'
                 {...formik.getFieldProps('location')}
               />
             </FormRow>
             <FormRow>
-              <Label htmlFor="date">Datum</Label>
-              <Input id="date" type="date" {...formik.getFieldProps('date')} />
+              <Label htmlFor='date'>Datum</Label>
+              <Input id='date' type='date' {...formik.getFieldProps('date')} />
             </FormRow>
-            <Button type="submit">Dodaj na popis</Button>
+            <Button type='submit'>Dodaj na popis</Button>
           </Form>
         </DashboardFeatures>
         <DashboardData>
@@ -91,17 +102,12 @@ const Dashboard = () => {
             <TableContent>
               {posts.length !== 0 &&
                 posts.map((values, index) => {
-                  let done = false;
-                  if (values.date.split('-')[1] < month) {
-                    done = true;
-                  } else if (
-                    values.date.split('-')[1] <= month &&
-                    day >= values.date.split('-')[2]
-                  ) {
-                    done = true;
-                  }
+                  const done = moment(values.date).isBefore(moment());
                   return (
-                    <Tr key={index}>
+                    <Tr
+                      key={index}
+                      onDoubleClick={() => deleteEvent(values.id)}
+                    >
                       <Td done={done}>{values.celebration}</Td>
                       <Td done={done}>{values.location}</Td>
                       <Td done={done}>{`${values.date.split('-')[2]}.${
